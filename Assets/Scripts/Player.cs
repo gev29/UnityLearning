@@ -1,56 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private const float MovementSpeed = 5f;
-
-    private void Awake()
-    {
-        
-    }
-
-    private void OnEnable()
-    {
-        
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
+    [SerializeField] private float movementSpeed;
 
     // Update is called once per frame
     void Update()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
-        Vector2 offset = new Vector2(horizontal, vertical).normalized;
+        Vector2 direction = new Vector2(horizontal, vertical).normalized;
 
-        transform.Translate(offset * Time.deltaTime * MovementSpeed, Space.Self);
+        transform.Translate(direction * Time.deltaTime * movementSpeed, Space.Self);
+        // The same as - transform.localPosition = transform.localPosition + direction * Time.deltaTime * movementSpeed;
     }
-
-    private void LateUpdate()
-    {
-        
-    }
-
-    private void FixedUpdate()
-    {
-        
-    }
-
-
-    private void OnDisable()
-    {
-
-    }
-
-    private void OnDestroy()
-    {
-        
-    }
-
 }

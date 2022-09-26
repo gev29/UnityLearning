@@ -1,18 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
     private const float DistanceFromPlayer = -10f;
 
-    [SerializeField] private Player player;
+    [SerializeField] private Transform targetObj;
+    [SerializeField] private float movementSpeed;
 
-    // Update is called once per frame
+    // We're using LateUpdate to be sure player's movement calculations are finished for this frame
     void LateUpdate()
     {
-        Vector3 playerPosition = player.transform.position;
-        playerPosition.z += DistanceFromPlayer;
-        transform.position = playerPosition;
+        Vector3 targetPos = targetObj.transform.position;
+        Vector3 camerPos = transform.position;
+        camerPos.z = 0;
+
+        Vector3 resultPos = Vector3.Lerp(camerPos, targetPos, (Time.deltaTime * movementSpeed) / (targetPos - camerPos).magnitude);
+
+        resultPos.z += DistanceFromPlayer;
+        transform.position = resultPos;
     }
 }
