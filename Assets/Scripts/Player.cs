@@ -3,12 +3,16 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private float movementSpeed;
+    [SerializeField] private float rotationLerpCoef;
 
     // Update is called once per frame
     void Update()
     {
-        MovePlayer();
-        RotatePlayer();
+        if (!GameManager.Instance.GameFinished)
+        {
+            MovePlayer();
+            RotatePlayer();
+        }
     }
 
     private void MovePlayer()
@@ -17,7 +21,7 @@ public class Player : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
         Vector2 direction = new Vector2(horizontal, vertical).normalized;
 
-        transform.Translate(direction * Time.deltaTime * movementSpeed, Space.Self);
+        transform.Translate(direction * Time.deltaTime * movementSpeed, Space.World);
         // The same as - transform.localPosition = transform.localPosition + direction * Time.deltaTime * movementSpeed;
     }
 
@@ -28,7 +32,8 @@ public class Player : MonoBehaviour
 
         Vector2 direction = mousePosition - transform.position;
         //transform.LookAt(mousePosition); will not work in 2D
-        transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
+        Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, direction); ;
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationLerpCoef);
         //transform.rotation = Quaternion.FromToRotation(Vector3.up, direction);
         //transform.rotation = Quaternion.Euler(Vector3.forward * (Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90));
 
