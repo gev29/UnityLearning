@@ -5,13 +5,13 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    [SerializeField] private Transform player;
-    [SerializeField] private Transform targetObj;
-    [SerializeField] private float distanceToWin;
+    [SerializeField] protected Transform player;
+    [SerializeField] protected Transform targetObj;
+    [SerializeField] protected float distanceToWin;
 
     public bool GameFinished { get; private set; }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         if (Instance != null)
         {
@@ -21,15 +21,23 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         Vector3 difference = targetObj.position - player.position;
-
         if (!GameFinished && difference.sqrMagnitude < distanceToWin * distanceToWin)
         {
-            Debug.Log("Level 1 passed");
             GameFinished = true;
-            SceneManager.LoadScene(1);
+            LoadNextLevel();
+        }
+    }
+
+    private void LoadNextLevel()
+    {
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        Debug.Log($"<color=green>Level {nextSceneIndex} passed</color>");
+        if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
+        {
+            SceneManager.LoadScene(nextSceneIndex);
         }
     }
 }
