@@ -9,6 +9,7 @@ public class Level2Manager : GameManager
     [SerializeField] private float addEnemyDelay;
     [SerializeField] private List<Transform> spawnPoints;
     [SerializeField] private Transform enemiesParent;
+    [SerializeField] private float enemiesCount;
 
     [Header("Level 2 Prefabs")]
     [SerializeField] private GameObject enemyPrefab;
@@ -24,7 +25,10 @@ public class Level2Manager : GameManager
     protected override void Update()
     {
         base.Update();
-        UpdateEnemyTimer();
+        if (!GameFinished)
+        {
+            UpdateEnemyTimer();
+        }
     }
 
     private void UpdateEnemyTimer()
@@ -41,7 +45,10 @@ public class Level2Manager : GameManager
                 enemy.transform.SetParent(enemiesParent);
                 enemy.Init(player);
 
-                curTime = addEnemyDelay;
+                if (--enemiesCount != 0)
+                {
+                    curTime = addEnemyDelay;
+                }
             }
         }
     }

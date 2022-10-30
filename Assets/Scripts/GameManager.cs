@@ -29,6 +29,15 @@ public class GameManager : MonoBehaviour
             GameFinished = true;
             LoadNextLevel();
         }
+        if (GameFinished && Input.GetKeyUp(KeyCode.R))
+        {
+            ReloadLevel();
+        }
+    }
+
+    private void ReloadLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void LoadNextLevel()
@@ -39,5 +48,10 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(nextSceneIndex);
         }
+    }
+
+    public void GameOver()
+    {
+        GameFinished = true;
     }
 }

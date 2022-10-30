@@ -22,9 +22,25 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector3 direction = (player.position - transform.position).normalized;
+        if (!GameManager.Instance.GameFinished)
+        {
+            Vector3 direction = (player.position - transform.position).normalized;
 
-        rb.velocity = direction * movementSpeed;
-        rb.MoveRotation(Quaternion.LookRotation(Vector3.forward, direction));
+            rb.velocity = direction * movementSpeed;
+            rb.MoveRotation(Quaternion.LookRotation(Vector3.forward, direction));
+        }
+        else
+        {
+            rb.velocity = Vector3.zero;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Bullet")
+        {
+            Destroy(collision.gameObject);
+            Destroy(gameObject);
+        }
     }
 }
