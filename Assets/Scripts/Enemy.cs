@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Bullet")
+        if (collision.CompareTag(GOTag.Bullet.ToString()))
         {
             Destroy(collision.gameObject);
             Destroy(gameObject);

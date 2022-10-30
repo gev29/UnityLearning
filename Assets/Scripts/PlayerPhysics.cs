@@ -78,7 +78,7 @@ public class PlayerPhysics : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.CompareTag(GOTag.Enemy.ToString()))
         {
             Destroy(collision.gameObject);
             SetHealth(health - 100f / hitCount);
