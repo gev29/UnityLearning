@@ -87,12 +87,17 @@ public class PlayerPhysics : MonoBehaviour
 
     private void SetHealth(float xpAmount)
     {
-        health = Mathf.Max(xpAmount, 0);
+        health = Mathf.Clamp(xpAmount, 0, 100);
         spriteRenderer.color = Color.Lerp(Color.black, defaultColor, health / 100f);
 
         if (health <= 0)
         {
             GameManager.Instance.GameOver();
         }
+    }
+
+    public void Heal(float xpAmount)
+    {
+        SetHealth(health + xpAmount);
     }
 }

@@ -11,6 +11,16 @@ public class HealArea : MonoBehaviour
 
     [SerializeField] private SpriteRenderer background;
     [SerializeField] private float animationSpeed;
+    [SerializeField] private float healingSpeed;
+    [SerializeField] private AnimationCurve animationCurve;
+
+    //private IEnumerator enumerator;
+    private Coroutine coroutine;
+
+    private void Awake()
+    {
+        SetBrightness(minBrightness);
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -30,21 +40,51 @@ public class HealArea : MonoBehaviour
 
     private void Activate(PlayerPhysics player)
     {
-        StartCoroutine(Heal(player));
-    }
+        //StartCoroutine("Heal", player);
 
-    private IEnumerator Heal(PlayerPhysics player)
-    {
-        while (true)
-        {
-            yield return null;
+        //enumerator = Heal(player);
+        //StartCoroutine(enumerator);
 
-
-        }
+        coroutine = StartCoroutine(Heal(player));
     }
 
     private void Deactivate()
     {
-        StopAllCoroutines();
+        //StopCoroutine("Heal");
+        //StopCoroutine(enumerator);
+        StopCoroutine(coroutine);
+
+        //StopAllCoroutines();
+        SetBrightness(minBrightness);
+    }
+
+    private IEnumerator Heal(PlayerPhysics player)
+    {
+        //float curBrightness = minBrightness;
+        //float targetBrightness = maxBrightness;
+        float curTime = 0;
+        while (true)
+        {
+            yield return null;
+
+            curTime = (curTime + Time.deltaTime * animationSpeed) % 1;
+            SetBrightness(animationCurve.Evaluate(curTime));
+
+            //curBrightness = Mathf.MoveTowards(curBrightness, targetBrightness, Time.deltaTime * animationSpeed);
+            //if (curBrightness == targetBrightness)
+            //{
+            //    targetBrightness = minBrightness + maxBrightness - targetBrightness;
+            //}
+            //SetBrightness(curBrightness);
+
+            player.Heal(Time.deltaTime * healingSpeed);
+        }
+    }
+
+    private void SetBrightness(float brightness)
+    {
+        brightness = Mathf.Clamp01(brightness);
+        Color.RGBToHSV(background.color, out float h, out float s, out float _);
+        background.color = Color.HSVToRGB(h, s, brightness);
     }
 }

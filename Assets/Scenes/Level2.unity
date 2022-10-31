@@ -331,7 +331,7 @@ Transform:
   - {fileID: 2027587022}
   - {fileID: 1860166952}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &332834160
 GameObject:
@@ -450,7 +450,7 @@ Transform:
   - {fileID: 149399189}
   - {fileID: 1455098642}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &462922476
 GameObject:
@@ -592,7 +592,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &609332871
 GameObject:
@@ -720,7 +720,7 @@ GameObject:
   - component: {fileID: 664568203}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1134,7 +1134,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1154395673
 GameObject:
@@ -1175,7 +1175,9 @@ MonoBehaviour:
   - {fileID: 149399189}
   - {fileID: 1455098642}
   enemiesParent: {fileID: 1360774409}
-  enemiesCount: 10
+  enemiesCount: 3
+  gate: {fileID: 1860166952}
+  gateOpenSpeed: 2
   enemyPrefab: {fileID: 1954795480944013289, guid: 1463cb3bfdffb4992959418fe8ae26d5, type: 3}
 --- !u!4 &1154395675
 Transform:
@@ -1363,10 +1365,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dbc27eeae3664c21a0fa410352bc48b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minBrightness: 0
-  maxBrightness: 0
+  minBrightness: 0.4
+  maxBrightness: 1
   background: {fileID: 1549885634}
-  animationSpeed: 0
+  animationSpeed: 1
+  healingSpeed: 20
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.4
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.4
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &1276096479
 Transform:
   m_ObjectHideFlags: 0
@@ -1383,7 +1419,7 @@ Transform:
   - {fileID: 1186441806}
   - {fileID: 1718888091}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1360774408
 GameObject:
@@ -1414,7 +1450,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1455098641
 GameObject:
@@ -1627,7 +1663,7 @@ GameObject:
   - component: {fileID: 1860166953}
   - component: {fileID: 1860166954}
   m_Layer: 0
-  m_Name: Door
+  m_Name: Gate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1688,7 +1724,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 826069521
   m_SortingLayer: -1
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.4811321, g: 0.30422366, b: 0.14297792, a: 1}
   m_FlipX: 0

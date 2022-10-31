@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -11,6 +10,7 @@ public class Bullet : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        StartCoroutine(DestroyCoroutine());
     }
 
     public void SetVelocity(Vector3 velocity)
@@ -18,15 +18,22 @@ public class Bullet : MonoBehaviour
         rb.velocity = velocity;
     }
 
-    private void Update()
+    //private void Update()
+    //{
+    //    if (destroyTime > 0)
+    //    {
+    //        destroyTime = Mathf.Max(destroyTime - Time.deltaTime, 0);
+    //        if (destroyTime == 0)
+    //        {
+    //            Destroy(gameObject);
+    //        }
+    //    }
+    //}
+
+    private IEnumerator DestroyCoroutine()
     {
-        if (destroyTime > 0)
-        {
-            destroyTime = Mathf.Max(destroyTime - Time.deltaTime, 0);
-            if (destroyTime == 0)
-            {
-                Destroy(gameObject);
-            }
-        }
+        yield return new WaitForSeconds(destroyTime);
+
+        Destroy(gameObject);
     }
 }
