@@ -23,11 +23,14 @@ public class GameManager : MonoBehaviour
 
     protected virtual void Update()
     {
-        Vector3 difference = targetObj.position - player.position;
-        if (!GameFinished && difference.sqrMagnitude < distanceToWin * distanceToWin)
+        if (player != null && targetObj != null)
         {
-            GameFinished = true;
-            LoadNextLevel();
+            Vector3 difference = targetObj.position - player.position;
+            if (!GameFinished && difference.sqrMagnitude < distanceToWin * distanceToWin)
+            {
+                GameFinished = true;
+                LoadNextLevel();
+            }
         }
         if (GameFinished && Input.GetKeyUp(KeyCode.R))
         {
