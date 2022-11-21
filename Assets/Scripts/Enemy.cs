@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -9,15 +8,18 @@ public class Enemy : MonoBehaviour
 
     private Transform player;
     private Rigidbody2D rb;
+    private bool killed;
+    private Action<bool> onDestroy;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Init(Transform player)
+    public void Init(Transform player, Action<bool> onDestroy)
     {
         this.player = player;
+        this.onDestroy = onDestroy;
     }
 
     private void FixedUpdate()
@@ -39,8 +41,14 @@ public class Enemy : MonoBehaviour
     {
         if (collision.CompareTag(GOTag.Bullet.ToString()))
         {
+            killed = true;
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }
+    }
+
+    private void OnDestroy()
+    {
+        this.onDestroy?.Invoke(killed);
     }
 }

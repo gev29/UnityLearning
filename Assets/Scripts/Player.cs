@@ -1,31 +1,33 @@
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : APlayer
 {
-    [SerializeField] private float movementSpeed;
     [SerializeField] private float rotationLerpCoef;
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (!GameManager.Instance.GameFinished)
         {
             MovePlayer();
             RotatePlayer();
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                Shoot();
+            }
         }
     }
 
-    private void MovePlayer()
+    protected override void MovePlayer()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-        Vector2 direction = new Vector2(horizontal, vertical).normalized;
-
         transform.Translate(direction * Time.deltaTime * movementSpeed, Space.World);
         // The same as - transform.localPosition = transform.localPosition + direction * Time.deltaTime * movementSpeed;
     }
 
-    private void RotatePlayer()
+    protected override void RotatePlayer()
     {
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = transform.position.z;

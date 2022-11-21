@@ -26,7 +26,7 @@ public class HealArea : MonoBehaviour
     {
         if (collision.CompareTag(GOTag.Player.ToString()))
         {
-            Activate(collision.GetComponent<PlayerPhysics>());
+            Activate(collision.GetComponent<APlayer>());
         }
     }
 
@@ -38,7 +38,7 @@ public class HealArea : MonoBehaviour
         }
     }
 
-    private void Activate(PlayerPhysics player)
+    private void Activate(APlayer player)
     {
         //StartCoroutine("Heal", player);
 
@@ -58,7 +58,7 @@ public class HealArea : MonoBehaviour
         SetBrightness(minBrightness);
     }
 
-    private IEnumerator Heal(PlayerPhysics player)
+    private IEnumerator Heal(APlayer player)
     {
         //float curBrightness = minBrightness;
         //float targetBrightness = maxBrightness;

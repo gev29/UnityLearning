@@ -9,12 +9,15 @@ public class Level2Manager : GameManager
     [SerializeField] private float addEnemyDelay;
     [SerializeField] private List<Transform> spawnPoints;
     [SerializeField] private Transform enemiesParent;
-    [SerializeField] private float enemiesCount;
+    [SerializeField] private int enemiesCount;
     [SerializeField] private Transform gate;
     [SerializeField] private float gateOpenSpeed;
 
     [Header("Level 2 Prefabs")]
     [SerializeField] private GameObject enemyPrefab;
+
+    private int leftEnemiesCount;
+    private int killedEnemiesCount;
 
     //private float curTime;
 
@@ -22,7 +25,14 @@ public class Level2Manager : GameManager
     {
         base.Awake();
         //curTime = addEnemyDelay;
+        leftEnemiesCount = enemiesCount;
         StartCoroutine(UpdateEnemyTimer());
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        UpdateEnemyCounter();
     }
 
     //private void UpdateEnemyTimer()
@@ -49,22 +59,36 @@ public class Level2Manager : GameManager
 
     private IEnumerator UpdateEnemyTimer()
     {
-        while(!GameFinished && enemiesCount > 0)
+        while(!GameFinished && leftEnemiesCount > 0)
         {
             yield return new WaitForSeconds(addEnemyDelay);
 
             Vector3 randomPoint = spawnPoints[Random.Range(0, spawnPoints.Count)].position;
-            Vector3 direction = player.position - randomPoint;
+            Vector3 direction = player.transform.position - randomPoint;
             Enemy enemy = Instantiate(enemyPrefab, randomPoint, Quaternion.LookRotation(Vector3.forward, direction)).GetComponent<Enemy>();
             enemy.transform.SetParent(enemiesParent);
-            enemy.Init(player);
-            enemiesCount--;
+            enemy.Init(player.transform, EnemyDestroyed);
+            leftEnemiesCount--;
         }
 
         if (!GameFinished)
         {
             StartCoroutine(OpenGate());
         }
+    }
+
+    private void EnemyDestroyed(bool killed)
+    {
+        if (killed)
+        {
+            killedEnemiesCount++;
+            UpdateEnemyCounter();
+        }
+    }
+
+    private void UpdateEnemyCounter()
+    {
+        UIManager.Instance.UpdateEnemyCounter(killedEnemiesCount, enemiesCount);
     }
 
     private IEnumerator OpenGate()
