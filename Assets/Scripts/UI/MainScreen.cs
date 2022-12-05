@@ -8,6 +8,7 @@ public class MainScreen : MonoBehaviour
     [SerializeField] private GameObject healthContainer;
     [SerializeField] private Slider healthSlider;
     [SerializeField] private Text healthPercentText;
+    [SerializeField] private Slider manaSlider;
     [SerializeField] private Button reloadButton;
     [SerializeField] private Button nextLevelButton;
     [SerializeField] private GameObject enemyCounterContainer;
@@ -72,6 +73,9 @@ public class MainScreen : MonoBehaviour
             float playerNormalizedHealth = player.Health / APlayer.MaxHP;
             healthSlider.value = playerNormalizedHealth;
             healthPercentText.text = $"{Mathf.CeilToInt(playerNormalizedHealth * 100)}%";
+
+            float playerNormalizedMana = player.Mana / APlayer.MaxMana;
+            manaSlider.value = playerNormalizedMana;
         }
         else if (healthContainer.activeSelf)
         {

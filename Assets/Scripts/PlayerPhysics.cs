@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerPhysics : APlayer
+public class PlayerPhysics : APlayer2D
 {
     private Rigidbody2D rb;
     private int shootCount;

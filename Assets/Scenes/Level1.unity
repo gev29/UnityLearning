@@ -389,7 +389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetObj: {fileID: 1734141122}
-  distanceFromPlayer: -10
+  distanceFromPlayer: {x: 0, y: 0, z: -10}
   movementLerpCoef: 3
 --- !u!1 &819413133
 GameObject:

@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class APlayer : MonoBehaviour
 {
     public const float MaxHP = 100f;
+    public const float MaxMana = 100f;
 
     private const string InputHorizontalAxix = "Horizontal";
     private const string InputVerticalAxix = "Vertical";
@@ -19,18 +18,17 @@ public abstract class APlayer : MonoBehaviour
 
     protected Vector2 direction;
 
-    protected SpriteRenderer spriteRenderer;
     protected Transform bulletsParent;
-    protected Color defaultColor;
     protected float health;
+    protected float mana;
 
     public float Health => health;
+    public float Mana => mana;
 
     protected virtual void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        defaultColor = spriteRenderer.color;
         SetHealth(MaxHP);
+        SetMana(MaxMana);
         bulletsParent = new GameObject(BulletsParentName).transform;
     }
 
@@ -48,15 +46,19 @@ public abstract class APlayer : MonoBehaviour
         bullet.SetVelocity(transform.up * bulletSpeed);
     }
 
-    protected void SetHealth(float xpAmount)
+    protected virtual void SetHealth(float xpAmount)
     {
         health = Mathf.Clamp(xpAmount, 0, MaxHP);
-        spriteRenderer.color = Color.Lerp(Color.black, defaultColor, health / MaxHP);
 
         if (health <= 0)
         {
             GameManager.Instance.GameOver();
         }
+    }
+
+    protected virtual void SetMana(float manaAmount)
+    {
+        mana = Mathf.Clamp(manaAmount, 0, MaxMana);
     }
 
     public void Heal(float xpAmount)

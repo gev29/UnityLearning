@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Player : APlayer
+public class Player : APlayer2D
 {
     [SerializeField] private float rotationLerpCoef;
 
