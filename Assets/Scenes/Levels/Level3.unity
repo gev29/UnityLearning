@@ -1222,6 +1222,8 @@ MonoBehaviour:
   bulletPrefab: {fileID: 0}
   platformSize: {x: 1.5, y: 0.5, z: 1.5}
   platformMaterial: {fileID: 2100000, guid: ec89674e0c03d4d2dbc1fbb267652d4c, type: 2}
+  platformSideMaterial: {fileID: 2100000, guid: 97561d79810f14f6cb3b1a46f38d2305, type: 2}
+  platformSectionMaterial: {fileID: 2100000, guid: b5d796b35965941639308f0ae280fa4b, type: 2}
   rotationSpeed: 90
   buildingManaUsageSpeed: 10
 --- !u!54 &1490194932

@@ -7,6 +7,8 @@ public class BuilderPlayer : APlayer
 
     [SerializeField] protected Vector3 platformSize;
     [SerializeField] protected Material platformMaterial;
+    [SerializeField] protected Material platformSideMaterial;
+    [SerializeField] protected Material platformSectionMaterial;
     [SerializeField] protected float rotationSpeed;
     [SerializeField] protected float buildingManaUsageSpeed;
 
@@ -108,7 +110,9 @@ public class BuilderPlayer : APlayer
 
         GenerateMesh();
 
-        mr.material = platformMaterial;
+        //mr.material = platformMaterial;
+        mr.materials = new Material[] { platformMaterial, platformSideMaterial, platformSectionMaterial };
+
 
         oldDirection = direction;
     }
@@ -194,34 +198,64 @@ public class BuilderPlayer : APlayer
         List<Vector3> vertices = new List<Vector3>();
         List<int> triangles = new List<int>();
         List<Vector3> normals = new List<Vector3>();
+        List<Vector2> uv = new List<Vector2>();
+
+        List<int> topTriangles = new List<int>();
+        List<int> sideTriangles = new List<int>();
+        List<int> sectionTriangles = new List<int>();
 
 
-        AddVertices(leftVertices, false, vertices, triangles, normals);
-        AddVertices(rightVertices, true, vertices, triangles, normals);
+        //AddVertices(leftVertices, false, vertices, triangles, normals, uv);
+        //AddVertices(rightVertices, true, vertices, triangles, normals, uv);
 
-        AddVertices(bottomVertices, false, vertices, triangles, normals);
-        AddVertices(topVertices, true, vertices, triangles, normals);
+        //AddVertices(bottomVertices, false, vertices, triangles, normals, uv);
+        //AddVertices(topVertices, true, vertices, triangles, normals, uv);
 
-        AddVertices(backVertices, false, vertices, triangles, normals);
-        AddVertices(frontVertices, true, vertices, triangles, normals);
+        //AddVertices(backVertices, false, vertices, triangles, normals, uv);
+        //AddVertices(frontVertices, true, vertices, triangles, normals, uv);
 
 
+
+        AddVertices(topVertices, true, vertices, topTriangles, normals, uv);
+
+        AddVertices(leftVertices, false, vertices, sideTriangles, normals, uv);
+        AddVertices(rightVertices, true, vertices, sideTriangles, normals, uv);
+        AddVertices(bottomVertices, false, vertices, sideTriangles, normals, uv);
+
+        AddVertices(backVertices, false, vertices, sectionTriangles, normals, uv);
+        AddVertices(frontVertices, true, vertices, sectionTriangles, normals, uv);
+
+        mesh.subMeshCount = 3;
 
         mesh.vertices = vertices.ToArray();
-        mesh.triangles = triangles.ToArray();
+        mesh.SetTriangles(topTriangles.ToArray(), 0);
+        mesh.SetTriangles(sideTriangles.ToArray(), 1);
+        mesh.SetTriangles(sectionTriangles.ToArray(), 2);
+
+        //mesh.vertices = vertices.ToArray();
+        //mesh.triangles = triangles.ToArray();
         mesh.normals = normals.ToArray();
+        mesh.uv = uv.ToArray();
         mesh.RecalculateBounds();
 
         platformMeshFilter.sharedMesh = mesh;
         platformMeshCollider.sharedMesh = mesh;
     }
 
-    private void AddVertices(List<Vector3> curVertices, bool clockwise, List<Vector3> vertices, List<int> triangles, List<Vector3> normals)
+    private void AddVertices(List<Vector3> curVertices, bool clockwise, List<Vector3> vertices, List<int> triangles, List<Vector3> normals, List<Vector2> uv)
     {
         List<int> curTriangles;
         Vector3 curNormal = Vector3.zero;
         Vector3 prevNormal;
         Vector3 resultNormal;
+        float sectorLength = 0;
+        for (int i = 2; i < curVertices.Count - 1; i += 2)
+        {
+            sectorLength += Vector3.Distance((curVertices[i] + curVertices[i + 1]) / 2f, (curVertices[i - 2] + curVertices[i - 1]) / 2f);
+        }
+
+
+        float curLength = 0;
         int baseIndex = vertices.Count;
         for (int i = 0; i < curVertices.Count - 3; i += 2)
         {
@@ -260,9 +294,20 @@ public class BuilderPlayer : APlayer
 
             normals.Add(resultNormal);
             normals.Add(resultNormal);
+
+            float v = 0;
+            if (sectorLength > 0)
+            {
+                v = curLength / sectorLength;
+            }
+            curLength += Vector3.Distance((curVertices[i + 2] + curVertices[i + 3]) / 2f, (curVertices[i] + curVertices[i + 1]) / 2f);
+            uv.Add(new Vector2(1, v));
+            uv.Add(new Vector2(0, v));
         }
         normals.Add(curNormal);
         normals.Add(curNormal);
+        uv.Add(Vector2.one);
+        uv.Add(Vector2.up);
         vertices.AddRange(curVertices);
     }
 
@@ -318,6 +363,7 @@ public class BuilderPlayer : APlayer
         };
 
 
+        //Vector3[] normals = new Vector3[8] { Vector3.right, Vector3.right, Vector3.right, Vector3.right, Vector3.right, Vector3.right, Vector3.right, Vector3.right };
         Vector3[] normals = new Vector3[8] { (Vector3.left + Vector3.down + Vector3.back).normalized, (Vector3.left + Vector3.down + Vector3.forward).normalized, (Vector3.right + Vector3.down + Vector3.forward).normalized, (Vector3.right + Vector3.down + Vector3.back).normalized, (Vector3.left + Vector3.up + Vector3.back).normalized, (Vector3.left + Vector3.up + Vector3.forward).normalized, (Vector3.right + Vector3.up + Vector3.forward).normalized, (Vector3.right + Vector3.up + Vector3.back).normalized };
         for (int i = 0; i < verts.Length; i++)
         {
